@@ -10,7 +10,7 @@ namespace ContosoCrafts.Models
 {
     public class Product
     {
-        public int ID { get; set; }
+        public string Id { get; set; }
 
         public string Maker { get; set; }
 
