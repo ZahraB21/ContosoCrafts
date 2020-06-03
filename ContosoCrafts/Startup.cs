@@ -5,10 +5,14 @@ using System.Threading.Tasks;
 using ContosoCrafts.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using System.Text.Json;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ContosoCrafts.Models;
+using Microsoft.AspNetCore.Http;
+using System.Collections;
 
 namespace ContosoCrafts
 {
@@ -52,6 +56,12 @@ namespace ContosoCrafts
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapGet("/products", (context) =>
+                {
+                    var products = app.ApplicationServices.GetService<JsonFileProductService>().GetProducts();
+                    var json = JsonSerializer.Serialize<IEnumerable<Product>>(products);
+                    return context.Response.WriteAsync(json);
+                });
             });
         }
     }
