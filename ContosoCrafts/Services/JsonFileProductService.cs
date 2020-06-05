@@ -20,7 +20,7 @@ namespace ContosoCrafts.Services
 
         private string JsonFileName
         {
-            get { return Path.Combine(WebHostEnvironment.WebRootPath, "data", "products"); }
+            get { return Path.Combine(WebHostEnvironment.WebRootPath, "data", "products.json"); }
         }
 
         public IEnumerable<Product> GetProducts()
@@ -28,10 +28,41 @@ namespace ContosoCrafts.Services
             using (var jsonFileReader = File.OpenText(JsonFileName))
             {
                 return JsonSerializer.Deserialize<Product[]>(jsonFileReader.ReadToEnd(),
-                    new JsonSerializerOptions{
-                    PropertyNameCaseInsensitive = true
+                    new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
                     });
             }
+        }
+
+        public void AddRating(int rating, string productId)
+        {
+            var products = GetProducts();
+
+            var query = products.First(x => x.Id == productId);
+
+            if(query.Ratings == null)
+            {
+                query.Ratings = new int[] { rating };
+            } 
+            else
+            {
+                var ratings = query.Ratings.ToList();
+                ratings.Add(rating);
+                query.Ratings = ratings.ToArray();
+            }
+
+            using ( var outputStream = File.OpenWrite(JsonFileName))
+            {
+                JsonSerializer.Serialize<IEnumerable<Product>>(
+                    new Utf8JsonWriter(outputStream, new JsonWriterOptions{
+                        SkipValidation = true,
+                        Indented = false
+                    }),
+                    products
+                );
+            }
+
         }
     }
 
