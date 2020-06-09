@@ -16,7 +16,7 @@
             </div>
             <div class="card-footer">
                 <small class="text-muted">
-                    <button @onclick=""></button>
+                    <button @onclick="(e => SelectProduct(product.Id)" class="btn btn-primary" data-toggle="modal" data-target="#productModal">More Info</button>
                 </small>
             </div>
         </div>
@@ -25,5 +25,13 @@
 </div>
 
 @code {
+    Product selectProduct;
+    string selectProductId;
 
+    void SelectProduct(string productId)
+    {
+        selectProductId = productId;
+        selectProduct = ProductServices.GetProducts().First(x => x.Id == productId);
+
+    }
 }
