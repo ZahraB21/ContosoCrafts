@@ -4,7 +4,7 @@
 @using ContosoCrafts.Models
 @using ContosoCrafts.Services
 @inject JsonFileProductService ProductServices
-  
+
 
 <div class="card-columns">
     @foreach (var product in ProductServices.GetProducts())
@@ -14,9 +14,9 @@
             <div class="card-body">
                 <h5 class="card-title">@product.Title</h5>
             </div>
-            <div class="card-footer">
+            <div class="card-footer text-center">
                 <small class="text-muted">
-                    <button @onclick="(e => SelectProduct(product.Id)" class="btn btn-primary" data-toggle="modal" data-target="#productModal">More Info</button>
+                    <button @onclick="(e => SelectProduct(product.Id))" class="btn btn-primary" data-toggle="modal" data-target="#productModal">More Info</button>
                 </small>
             </div>
         </div>
@@ -24,14 +24,41 @@
 
 </div>
 
+@if (selectedProduct != null)
+{
+    <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productTitle">@selectedProduct.Title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <div class="card-img" style="background-image: url('@selectedProduct.Image');">
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">@selectedProduct.Description</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @code {
-    Product selectProduct;
-    string selectProductId;
+    Product selectedProduct;
+    string selectedProductId;
 
     void SelectProduct(string productId)
     {
-        selectProductId = productId;
-        selectProduct = ProductServices.GetProducts().First(x => x.Id == productId);
+        selectedProductId = productId;
+        selectedProduct = ProductServices.GetProducts().First(x => x.Id == productId);
 
     }
 }
