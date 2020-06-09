@@ -1,5 +1,29 @@
 ﻿<h3>ProductList</h3>
 
+@using Microsoft.AspNetCore.Components.Web
+@using ContosoCrafts.Models
+@using ContosoCrafts.Services
+@inject JsonFileProductService ProductServices
+  
+
+<div class="card-columns">
+    @foreach (var product in ProductServices.GetProducts())
+    {
+        <div class="card">
+            <div class="card-img" style="background-image: url('@product.Image');"></div>
+            <div class="card-body">
+                <h5 class="card-title">@product.Title</h5>
+            </div>
+            <div class="card-footer">
+                <small class="text-muted">
+                    <button @onclick=""></button>
+                </small>
+            </div>
+        </div>
+    }
+
+</div>
+
 @code {
 
 }
